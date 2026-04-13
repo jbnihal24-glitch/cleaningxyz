@@ -1,589 +1,542 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>XYZ Cleaning — Spotless Spaces, Every Time</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>XYZ Cleaning — Spotless Spaces, Every Time</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --forest:#0f2d1f;--sage:#3d7a5a;--mint:#c8e6d5;--lime:#a8d5b5;
+  --cream:#f6f2eb;--sand:#e8ddd0;--white:#ffffff;--dark:#091a10;
+  --gold:#c9a84c;--light-sage:#e8f4ee;--mid:#2a5c3f;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--dark);overflow-x:hidden;cursor:none}
 
-    :root {
-      --mint:    #d4ede4;
-      --forest:  #1a3d2f;
-      --sage:    #4e7c65;
-      --cream:   #f8f5ef;
-      --sand:    #e8dfd0;
-      --accent:  #b5d5c5;
-      --dark:    #0e2119;
-      --white:   #ffffff;
-    }
+.cursor{position:fixed;width:12px;height:12px;background:var(--sage);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s,background .2s;mix-blend-mode:multiply}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid var(--sage);border-radius:50%;pointer-events:none;z-index:9998;transition:all .08s;opacity:.6}
 
-    html { scroll-behavior: smooth; }
+.progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--sage),var(--gold));z-index:200;transition:width .1s}
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--cream);
-      color: var(--dark);
-      overflow-x: hidden;
-    }
+nav{
+  position:fixed;top:0;width:100%;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 5vw;
+  background:rgba(246,242,235,0);
+  backdrop-filter:blur(0px);
+  border-bottom:1px solid transparent;
+  transition:all .4s;
+}
+nav.scrolled{background:rgba(246,242,235,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--sand)}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:700;color:var(--forest);letter-spacing:-1px;display:flex;align-items:center;gap:.3rem}
+.logo-dot{width:8px;height:8px;background:var(--gold);border-radius:50%;display:inline-block;margin-bottom:6px}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{text-decoration:none;font-size:.85rem;font-weight:500;color:var(--forest);letter-spacing:.04em;position:relative;padding-bottom:2px}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:var(--sage);transition:width .25s}
+.nav-links a:hover::after{width:100%}
+.nav-cta{background:var(--forest);color:var(--white);padding:.65rem 1.5rem;border-radius:100px;font-size:.83rem;font-weight:600;letter-spacing:.03em;text-decoration:none;transition:all .2s;border:2px solid var(--forest)}
+.nav-cta:hover{background:transparent;color:var(--forest)}
 
-    /* ── NAV ── */
-    nav {
-      position: fixed; top: 0; width: 100%; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1.2rem 5vw;
-      background: rgba(248,245,239,.85);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--sand);
-    }
-    .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem; font-weight: 900;
-      color: var(--forest);
-      letter-spacing: -0.5px;
-    }
-    .logo span { color: var(--sage); }
-    .nav-links { display: flex; gap: 2.2rem; list-style: none; }
-    .nav-links a {
-      text-decoration: none; font-size: .9rem; font-weight: 500;
-      color: var(--forest); letter-spacing: .03em;
-      transition: color .2s;
-    }
-    .nav-links a:hover { color: var(--sage); }
-    .nav-cta {
-      background: var(--forest); color: var(--white);
-      padding: .65rem 1.6rem; border-radius: 100px;
-      font-size: .88rem; font-weight: 500;
-      text-decoration: none; transition: background .2s, transform .15s;
-    }
-    .nav-cta:hover { background: var(--sage); transform: translateY(-1px); }
+.float-badge{
+  position:fixed;bottom:2rem;right:2rem;z-index:90;
+  background:var(--forest);color:var(--white);
+  padding:.8rem 1.4rem;border-radius:100px;
+  font-size:.82rem;font-weight:600;cursor:pointer;
+  box-shadow:0 8px 30px rgba(15,45,31,.3);
+  display:flex;align-items:center;gap:.5rem;
+  transition:transform .2s,box-shadow .2s;
+  animation:pulse 2.5s ease-in-out infinite;
+}
+.float-badge:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(15,45,31,.4)}
+@keyframes pulse{0%,100%{box-shadow:0 8px 30px rgba(15,45,31,.3)}50%{box-shadow:0 8px 40px rgba(15,45,31,.5),0 0 0 8px rgba(61,122,90,.1)}}
 
-    /* ── HERO ── */
-    header {
-      min-height: 100vh;
-      display: grid; grid-template-columns: 1fr 1fr;
-      align-items: center; padding: 7rem 5vw 4rem;
-      background: var(--cream);
-      position: relative; overflow: hidden;
-    }
-    header::before {
-      content: '';
-      position: absolute; right: -5%; top: 10%;
-      width: 55vw; height: 85vh; border-radius: 40% 60% 60% 40% / 50% 40% 60% 50%;
-      background: var(--mint);
-      z-index: 0; animation: morph 8s ease-in-out infinite alternate;
-    }
-    @keyframes morph {
-      0%   { border-radius: 40% 60% 60% 40% / 50% 40% 60% 50%; }
-      100% { border-radius: 60% 40% 50% 50% / 40% 60% 50% 60%; }
-    }
+header{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:8rem 5vw 5rem;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 70% 60% at 80% 40%,var(--light-sage) 0%,transparent 70%),radial-gradient(ellipse 50% 70% at 10% 80%,var(--mint) 0%,transparent 60%),var(--cream)}
+.hero-blob{position:absolute;right:-10%;top:5%;width:65vw;height:90vh;background:linear-gradient(135deg,var(--mint) 0%,var(--lime) 50%,var(--light-sage) 100%);border-radius:30% 70% 70% 30% / 40% 40% 60% 60%;opacity:.55;animation:blobMorph 10s ease-in-out infinite alternate;z-index:0}
+@keyframes blobMorph{0%{border-radius:30% 70% 70% 30% / 40% 40% 60% 60%}100%{border-radius:70% 30% 40% 60% / 60% 50% 50% 40%}}
+.hero-content{position:relative;z-index:1;max-width:680px}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.6rem;background:var(--forest);color:var(--mint);padding:.45rem 1.1rem;border-radius:100px;font-size:.76rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2rem;animation:fadeUp .7s ease both}
+.sparkle{animation:spin 3s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(3.2rem,7vw,6.5rem);line-height:1;font-weight:700;color:var(--forest);margin-bottom:1.6rem;animation:fadeUp .7s .1s ease both}
+h1 em{color:var(--sage);font-style:italic}
+h1 .line2{display:block;color:var(--mid)}
+.hero-sub{font-size:1.08rem;font-weight:300;line-height:1.75;color:#2a4d36;max-width:500px;margin-bottom:2.8rem;animation:fadeUp .7s .2s ease both}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp .7s .3s ease both}
+.btn-main{background:var(--forest);color:var(--white);padding:1rem 2.4rem;border-radius:100px;font-size:.95rem;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:all .25s;border:2px solid var(--forest)}
+.btn-main:hover{background:var(--sage);border-color:var(--sage);transform:translateY(-3px);box-shadow:0 12px 30px rgba(61,122,90,.3)}
+.btn-ghost{color:var(--forest);padding:.95rem 2rem;border-radius:100px;font-size:.95rem;font-weight:600;text-decoration:none;border:2px solid rgba(15,45,31,.3);transition:all .25s;display:inline-flex;align-items:center;gap:.5rem}
+.btn-ghost:hover{border-color:var(--forest);transform:translateY(-3px)}
+.trust-strip{display:flex;gap:2rem;margin-top:3.5rem;flex-wrap:wrap;animation:fadeUp .7s .4s ease both}
+.trust-item{display:flex;align-items:center;gap:.5rem;font-size:.82rem;font-weight:500;color:#3a5a4a}
+.trust-icon{width:28px;height:28px;background:var(--forest);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem}
+.hero-card-wrap{position:absolute;right:5vw;top:50%;transform:translateY(-50%);z-index:2;animation:fadeUp .8s .5s ease both}
+.hero-card{background:var(--white);border-radius:28px;padding:2rem;width:320px;box-shadow:0 40px 100px rgba(15,45,31,.18)}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.2rem}
+.card-rating{background:var(--forest);color:var(--white);padding:.3rem .8rem;border-radius:100px;font-size:.78rem;font-weight:600}
+.card-icon{font-size:2rem}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:var(--forest);margin-bottom:.4rem}
+.card-sub{font-size:.82rem;color:#5a7a6a;line-height:1.6;margin-bottom:1.2rem}
+.card-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem}
+.cstat{background:var(--light-sage);border-radius:12px;padding:.7rem .4rem;text-align:center}
+.cstat-n{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--forest)}
+.cstat-l{font-size:.68rem;color:var(--sage);margin-top:.1rem}
+.card-avatars{display:flex;margin-top:1.2rem;align-items:center;gap:.5rem}
+.av{width:32px;height:32px;border-radius:50%;border:2px solid var(--white);background:var(--sage);display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:var(--white);margin-left:-8px}
+.av:first-child{margin-left:0}
+.av-text{font-size:.78rem;color:#5a7a6a;margin-left:.3rem}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 
-    .hero-text { position: relative; z-index: 1; animation: fadeUp .8s ease both; }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(28px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: .5rem;
-      background: var(--forest); color: var(--mint);
-      padding: .4rem 1rem; border-radius: 100px;
-      font-size: .78rem; font-weight: 500; letter-spacing: .08em;
-      text-transform: uppercase; margin-bottom: 1.8rem;
-    }
-    .hero-badge::before { content: '✦'; font-size: .65rem; }
+section{padding:6rem 5vw}
+.stag{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);display:inline-block;margin-bottom:.7rem}
+h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:700;color:var(--forest);line-height:1.1;margin-bottom:.9rem}
+.sdesc{font-size:.98rem;line-height:1.75;color:#3a5a4a;max-width:520px;margin-bottom:3.5rem}
 
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.8rem, 5vw, 5rem);
-      line-height: 1.05; font-weight: 900;
-      color: var(--forest); margin-bottom: 1.4rem;
-    }
-    h1 em { color: var(--sage); font-style: italic; }
+/* SERVICES */
+.services-section{background:var(--white)}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.6rem}
+.scard{background:var(--cream);border-radius:24px;padding:2rem;position:relative;overflow:hidden;cursor:pointer;transition:transform .28s,box-shadow .28s;border:1.5px solid transparent}
+.scard:hover{transform:translateY(-8px);box-shadow:0 24px 60px rgba(15,45,31,.12);border-color:var(--mint)}
+.scard-glow{position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,var(--light-sage),transparent 60%);opacity:0;transition:opacity .3s}
+.scard:hover .scard-glow{opacity:1}
+.scard-icon{font-size:2.5rem;margin-bottom:1.2rem}
+.scard h3{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:700;color:var(--forest);margin-bottom:.5rem}
+.scard p{font-size:.87rem;line-height:1.65;color:#5a7a6a;margin-bottom:1rem}
+.scard-footer{display:flex;justify-content:space-between;align-items:center}
+.scard-price{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:var(--forest)}
+.scard-price span{font-family:'Plus Jakarta Sans',sans-serif;font-size:.75rem;font-weight:400;color:var(--sage)}
+.scard-tag{background:var(--forest);color:var(--mint);padding:.3rem .8rem;border-radius:100px;font-size:.72rem;font-weight:600}
 
-    .hero-sub {
-      font-size: 1.1rem; font-weight: 300; line-height: 1.7;
-      color: #3a5a4a; max-width: 440px; margin-bottom: 2.4rem;
-    }
-    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
-    .btn-primary {
-      background: var(--forest); color: var(--white);
-      padding: 1rem 2.2rem; border-radius: 100px;
-      font-size: .95rem; font-weight: 500; text-decoration: none;
-      transition: background .2s, transform .15s;
-    }
-    .btn-primary:hover { background: var(--sage); transform: translateY(-2px); }
-    .btn-outline {
-      border: 2px solid var(--forest); color: var(--forest);
-      padding: .9rem 2rem; border-radius: 100px;
-      font-size: .95rem; font-weight: 500; text-decoration: none;
-      transition: all .2s;
-    }
-    .btn-outline:hover { background: var(--forest); color: var(--white); transform: translateY(-2px); }
+/* BOOKING WIZARD */
+.booking-section{background:var(--light-sage)}
+.wizard-wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:4rem;align-items:start}
+.wizard-info h2{margin-bottom:1rem}
+.benefit-list{list-style:none;display:flex;flex-direction:column;gap:.8rem;margin-top:1.5rem}
+.benefit-list li{display:flex;align-items:center;gap:.8rem;font-size:.9rem;color:#2a4d36}
+.benefit-icon{width:32px;height:32px;background:var(--forest);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0}
+.wizard-card{background:var(--white);border-radius:28px;padding:2.4rem;box-shadow:0 30px 80px rgba(15,45,31,.12)}
+.wizard-steps{display:flex;gap:0;margin-bottom:2rem;border-radius:100px;background:var(--cream);padding:4px}
+.wizard-step-btn{flex:1;padding:.6rem;border-radius:100px;border:none;background:transparent;font-family:'Plus Jakarta Sans',sans-serif;font-size:.78rem;font-weight:600;color:var(--sage);cursor:pointer;transition:all .2s}
+.wizard-step-btn.active{background:var(--forest);color:var(--white)}
+.wizard-panel{display:none}
+.wizard-panel.active{display:block;animation:fadeUp .3s ease}
 
-    .hero-visual {
-      position: relative; z-index: 1;
-      display: flex; justify-content: center; align-items: center;
-      animation: fadeUp .8s .2s ease both;
-    }
-    .hero-card {
-      background: var(--white); border-radius: 28px;
-      padding: 2.4rem; max-width: 360px; width: 100%;
-      box-shadow: 0 30px 80px rgba(26,61,47,.15);
-    }
-    .hero-card-icon { font-size: 3rem; margin-bottom: 1rem; }
-    .hero-card h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem; color: var(--forest); margin-bottom: .6rem;
-    }
-    .hero-card p { font-size: .9rem; line-height: 1.6; color: #5a7a6a; }
-    .stars { color: #f4b942; font-size: 1.1rem; margin-top: 1rem; }
-    .review-count { font-size: .8rem; color: #7a9a8a; margin-top: .2rem; }
+.field-group{margin-bottom:1.2rem}
+.field-group label{display:block;font-size:.8rem;font-weight:600;color:var(--forest);margin-bottom:.4rem;letter-spacing:.02em}
+.field-group input,.field-group select,.field-group textarea{width:100%;padding:.8rem 1rem;border-radius:14px;border:1.5px solid var(--sand);background:var(--cream);font-family:'Plus Jakarta Sans',sans-serif;font-size:.9rem;color:var(--dark);outline:none;transition:border-color .2s,box-shadow .2s}
+.field-group input:focus,.field-group select:focus,.field-group textarea:focus{border-color:var(--sage);box-shadow:0 0 0 3px rgba(61,122,90,.08)}
+.field-group textarea{height:90px;resize:vertical}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 
-    .stat-row {
-      display: flex; gap: 1rem; margin-top: 1.4rem;
-    }
-    .stat {
-      flex: 1; background: var(--mint); border-radius: 16px;
-      padding: .9rem 1rem; text-align: center;
-    }
-    .stat-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem; font-weight: 900; color: var(--forest);
-    }
-    .stat-label { font-size: .75rem; color: var(--sage); margin-top: .15rem; }
+.service-picker{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.2rem}
+.spick{border:1.5px solid var(--sand);border-radius:16px;padding:.9rem;cursor:pointer;transition:all .2s;background:var(--cream);text-align:center}
+.spick:hover{border-color:var(--sage)}
+.spick.selected{border-color:var(--forest);background:var(--light-sage)}
+.spick-icon{font-size:1.6rem;margin-bottom:.3rem}
+.spick-name{font-size:.78rem;font-weight:600;color:var(--forest)}
+.spick-price{font-size:.7rem;color:var(--sage);margin-top:.1rem}
 
-    /* ── SERVICES ── */
-    .services { padding: 7rem 5vw; background: var(--white); }
-    .section-tag {
-      display: inline-block;
-      font-size: .78rem; font-weight: 500; letter-spacing: .12em;
-      text-transform: uppercase; color: var(--sage);
-      margin-bottom: .8rem;
-    }
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 3.5vw, 3rem);
-      color: var(--forest); margin-bottom: 1rem;
-    }
-    .section-sub { font-size: 1rem; color: #5a7a6a; max-width: 520px; line-height: 1.7; margin-bottom: 3.5rem; }
+.time-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:1.2rem}
+.time-slot{border:1.5px solid var(--sand);border-radius:12px;padding:.65rem;cursor:pointer;transition:all .2s;background:var(--cream);text-align:center;font-size:.8rem;font-weight:600;color:var(--forest)}
+.time-slot:hover{border-color:var(--sage)}
+.time-slot.selected{border-color:var(--forest);background:var(--forest);color:var(--white)}
+.time-slot.unavailable{opacity:.4;cursor:not-allowed;background:#f0ebe3}
 
-    .services-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.8rem;
-    }
-    .service-card {
-      background: var(--cream); border-radius: 24px;
-      padding: 2.2rem; position: relative; overflow: hidden;
-      transition: transform .25s, box-shadow .25s;
-      cursor: default;
-    }
-    .service-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 50px rgba(26,61,47,.12);
-    }
-    .service-card::after {
-      content: ''; position: absolute; bottom: 0; left: 0;
-      width: 100%; height: 4px; background: var(--sage);
-      transform: scaleX(0); transform-origin: left;
-      transition: transform .3s;
-    }
-    .service-card:hover::after { transform: scaleX(1); }
-    .service-icon { font-size: 2.4rem; margin-bottom: 1.2rem; }
-    .service-card h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem; color: var(--forest); margin-bottom: .6rem;
-    }
-    .service-card p { font-size: .9rem; line-height: 1.65; color: #5a7a6a; }
-    .service-price {
-      display: inline-block; margin-top: 1.2rem;
-      background: var(--forest); color: var(--mint);
-      padding: .35rem .9rem; border-radius: 100px;
-      font-size: .8rem; font-weight: 500;
-    }
+.freq-row{display:flex;gap:.7rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.freq-btn{flex:1;min-width:80px;border:1.5px solid var(--sand);border-radius:12px;padding:.7rem .5rem;cursor:pointer;transition:all .2s;background:var(--cream);text-align:center;font-size:.78rem;font-weight:600;color:var(--forest)}
+.freq-btn:hover{border-color:var(--sage)}
+.freq-btn.selected{background:var(--forest);color:var(--white);border-color:var(--forest)}
+.freq-badge{display:block;font-size:.62rem;font-weight:400;color:var(--gold);margin-top:.1rem}
+.freq-btn.selected .freq-badge{color:var(--mint)}
 
-    /* ── WHY US ── */
-    .why { padding: 7rem 5vw; background: var(--forest); color: var(--white); }
-    .why .section-tag { color: var(--accent); }
-    .why .section-title { color: var(--white); }
-    .why .section-sub { color: var(--accent); }
+.room-counter{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.room-counter > label{font-size:.82rem;color:#5a7a6a;font-weight:400;flex:1;margin:0}
+.counter-ctrl{display:flex;align-items:center;gap:.8rem}
+.cnt-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--sand);background:var(--cream);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;color:var(--forest);font-weight:600}
+.cnt-btn:hover{background:var(--forest);color:var(--white);border-color:var(--forest)}
+.cnt-val{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--forest);min-width:20px;text-align:center}
 
-    .why-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 2rem;
-    }
-    .why-item { display: flex; flex-direction: column; gap: .8rem; }
-    .why-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 3.5rem; font-weight: 900;
-      color: var(--sage); line-height: 1;
-    }
-    .why-item h4 { font-size: 1.05rem; font-weight: 500; color: var(--white); }
-    .why-item p { font-size: .88rem; line-height: 1.65; color: var(--accent); }
+.extras-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:1.2rem}
+.extra-item{border:1.5px solid var(--sand);border-radius:14px;padding:.8rem;cursor:pointer;transition:all .2s;background:var(--cream);display:flex;align-items:center;gap:.7rem}
+.extra-item:hover{border-color:var(--sage)}
+.extra-item.selected{border-color:var(--forest);background:var(--light-sage)}
+.extra-cb{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--sand);background:var(--white);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:.7rem}
+.extra-item.selected .extra-cb{background:var(--forest);border-color:var(--forest);color:var(--white)}
+.extra-name{font-weight:600;color:var(--forest);font-size:.78rem}
+.extra-price{font-size:.68rem;color:var(--sage)}
 
-    /* ── PROCESS ── */
-    .process { padding: 7rem 5vw; background: var(--cream); }
-    .steps {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 0; position: relative;
-    }
-    .steps::before {
-      content: ''; position: absolute; top: 28px; left: 0; right: 0; height: 2px;
-      background: repeating-linear-gradient(90deg, var(--sage) 0, var(--sage) 8px, transparent 8px, transparent 18px);
-    }
-    .step { padding: 0 1.5rem 2rem; position: relative; }
-    .step-dot {
-      width: 56px; height: 56px; border-radius: 50%;
-      background: var(--forest); color: var(--mint);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem; font-weight: 900;
-      margin-bottom: 1.4rem; position: relative; z-index: 1;
-    }
-    .step h4 { font-size: 1rem; font-weight: 500; color: var(--forest); margin-bottom: .5rem; }
-    .step p { font-size: .87rem; line-height: 1.65; color: #5a7a6a; }
+.price-summary{background:var(--cream);border-radius:18px;padding:1.2rem 1.4rem;margin-bottom:1.4rem}
+.price-row{display:flex;justify-content:space-between;font-size:.82rem;color:#5a7a6a;padding:.3rem 0}
+.price-row.total{border-top:1px solid var(--sand);margin-top:.5rem;padding-top:.8rem;font-weight:700;font-size:1rem;color:var(--forest)}
+.discount-tag{background:var(--sage);color:var(--white);font-size:.65rem;padding:.2rem .5rem;border-radius:100px;margin-left:.4rem}
 
-    /* ── TESTIMONIALS ── */
-    .testimonials { padding: 7rem 5vw; background: var(--mint); }
-    .testimonials-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.8rem;
-    }
-    .tcard {
-      background: var(--white); border-radius: 24px; padding: 2rem;
-      box-shadow: 0 8px 30px rgba(26,61,47,.07);
-    }
-    .tcard-quote { font-size: .95rem; line-height: 1.7; color: #3a5a4a; margin-bottom: 1.2rem; }
-    .tcard-quote::before { content: '"'; font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--sage); line-height: 0; vertical-align: -0.5rem; }
-    .tcard-author { display: flex; align-items: center; gap: .8rem; }
-    .avatar {
-      width: 42px; height: 42px; border-radius: 50%;
-      background: var(--sage); display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: .9rem; color: var(--white);
-    }
-    .author-name { font-weight: 500; font-size: .9rem; color: var(--forest); }
-    .author-loc { font-size: .78rem; color: var(--sage); }
+.wizard-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}
+.wiz-back{background:none;border:1.5px solid var(--sand);border-radius:100px;padding:.65rem 1.4rem;font-family:'Plus Jakarta Sans',sans-serif;font-size:.85rem;font-weight:600;color:var(--sage);cursor:pointer;transition:all .2s}
+.wiz-back:hover{border-color:var(--forest);color:var(--forest)}
+.wiz-next{background:var(--forest);color:var(--white);border:none;border-radius:100px;padding:.75rem 1.8rem;font-family:'Plus Jakarta Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:.4rem}
+.wiz-next:hover{background:var(--sage);transform:translateY(-1px)}
 
-    /* ── BOOKING ── */
-    #book { padding: 7rem 5vw; background: var(--white); }
-    .book-inner {
-      max-width: 600px; margin: 0 auto; text-align: center;
-    }
-    .book-inner .section-title { margin-bottom: .6rem; }
-    .book-inner .section-sub { margin: 0 auto 2.5rem; }
+/* WHY */
+.why-section{background:var(--forest);color:var(--white)}
+.why-section .stag{color:var(--mint)}
+.why-section h2{color:var(--white)}
+.why-section .sdesc{color:var(--lime);margin-bottom:3rem}
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem}
+.why-card{background:rgba(255,255,255,.06);border-radius:20px;padding:1.8rem;border:1px solid rgba(255,255,255,.1);transition:all .25s}
+.why-card:hover{background:rgba(255,255,255,.1);transform:translateY(-4px)}
+.why-no{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:700;color:var(--sage);line-height:1;margin-bottom:.8rem}
+.why-card h4{font-size:1rem;font-weight:600;color:var(--white);margin-bottom:.5rem}
+.why-card p{font-size:.85rem;line-height:1.65;color:var(--lime)}
 
-    .form-group { margin-bottom: 1.2rem; text-align: left; }
-    label { display: block; font-size: .85rem; font-weight: 500; color: var(--forest); margin-bottom: .4rem; }
-    input, select, textarea {
-      width: 100%; padding: .85rem 1.1rem; border-radius: 14px;
-      border: 2px solid var(--sand); background: var(--cream);
-      font-family: 'DM Sans', sans-serif; font-size: .95rem; color: var(--dark);
-      outline: none; transition: border-color .2s;
-    }
-    input:focus, select:focus, textarea:focus { border-color: var(--sage); }
-    textarea { height: 110px; resize: vertical; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-    .submit-btn {
-      width: 100%; padding: 1.1rem; background: var(--forest); color: var(--white);
-      border: none; border-radius: 100px; font-family: 'DM Sans', sans-serif;
-      font-size: 1rem; font-weight: 500; cursor: pointer; margin-top: .5rem;
-      transition: background .2s, transform .15s;
-    }
-    .submit-btn:hover { background: var(--sage); transform: translateY(-2px); }
+/* PROCESS */
+.process-section{background:var(--cream)}
+.steps-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;position:relative}
+.steps-wrap::before{content:'';position:absolute;top:28px;left:5%;right:5%;height:1px;background:repeating-linear-gradient(90deg,var(--sage) 0,var(--sage) 10px,transparent 10px,transparent 22px)}
+.step-item{padding:0 .5rem;position:relative}
+.step-dot{width:56px;height:56px;border-radius:50%;background:var(--forest);color:var(--mint);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;margin-bottom:1.4rem;position:relative;z-index:1;box-shadow:0 6px 20px rgba(15,45,31,.25)}
+.step-item h4{font-size:.95rem;font-weight:600;color:var(--forest);margin-bottom:.4rem}
+.step-item p{font-size:.83rem;line-height:1.65;color:#5a7a6a}
 
-    /* ── FOOTER ── */
-    footer {
-      background: var(--dark); color: var(--accent);
-      padding: 4rem 5vw 2rem;
-    }
-    .footer-top {
-      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 3rem; margin-bottom: 3rem;
-    }
-    .footer-brand .logo { color: var(--mint); }
-    .footer-brand p { font-size: .88rem; line-height: 1.7; margin-top: .8rem; color: var(--accent); max-width: 260px; }
-    .footer-col h5 { color: var(--white); font-size: .9rem; font-weight: 500; margin-bottom: 1rem; }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
-    .footer-col a { text-decoration: none; font-size: .85rem; color: var(--accent); transition: color .2s; }
-    .footer-col a:hover { color: var(--mint); }
-    .footer-bottom {
-      border-top: 1px solid #1e4030; padding-top: 1.5rem;
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: .8rem; color: #5a7a6a; flex-wrap: wrap; gap: .5rem;
-    }
+/* TESTIMONIALS */
+.testi-section{background:var(--mint)}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.6rem}
+.tcard{background:var(--white);border-radius:24px;padding:2rem;box-shadow:0 8px 30px rgba(15,45,31,.07);transition:transform .25s}
+.tcard:hover{transform:translateY(-5px)}
+.tcard-stars{color:#f4b942;font-size:1rem;margin-bottom:1rem}
+.tcard-quote{font-size:.92rem;line-height:1.72;color:#2a4d36;margin-bottom:1.4rem;font-style:italic}
+.tcard-author{display:flex;align-items:center;gap:.8rem}
+.tav{width:40px;height:40px;border-radius:50%;background:var(--sage);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:var(--white)}
+.tav-name{font-weight:600;font-size:.88rem;color:var(--forest)}
+.tav-loc{font-size:.75rem;color:var(--sage)}
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      header { grid-template-columns: 1fr; gap: 3rem; }
-      header::before { display: none; }
-      .hero-visual { display: none; }
-      .form-row { grid-template-columns: 1fr; }
-      .footer-top { grid-template-columns: 1fr 1fr; }
-      .steps::before { display: none; }
-      .nav-links { display: none; }
-    }
-  </style>
+/* FAQ */
+.faq-section{background:var(--white)}
+.faq-wrap{max-width:700px}
+.faq-item{border-bottom:1px solid var(--sand)}
+.faq-q{width:100%;background:none;border:none;text-align:left;padding:1.2rem 0;font-family:'Plus Jakarta Sans',sans-serif;font-size:.95rem;font-weight:600;color:var(--forest);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.faq-icon{width:28px;height:28px;border-radius:50%;background:var(--light-sage);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--sage);flex-shrink:0;transition:all .2s}
+.faq-item.open .faq-icon{background:var(--forest);color:var(--white);transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s;font-size:.88rem;line-height:1.75;color:#5a7a6a;padding:0}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:1.2rem}
+
+/* COVERAGE */
+.coverage-section{background:var(--cream)}
+.areas-wrap{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:2rem}
+.area-tag{background:var(--white);border:1.5px solid var(--sand);padding:.5rem 1.1rem;border-radius:100px;font-size:.83rem;font-weight:500;color:var(--forest);transition:all .2s;cursor:default}
+.area-tag:hover{background:var(--forest);color:var(--white);border-color:var(--forest)}
+
+footer{background:var(--dark);color:var(--lime);padding:5rem 5vw 2rem}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.2fr;gap:3rem;margin-bottom:3rem}
+.footer-brand .logo{color:var(--mint)}
+.footer-brand p{font-size:.85rem;line-height:1.7;margin-top:.8rem;color:var(--lime);max-width:240px}
+.footer-social{display:flex;gap:.6rem;margin-top:1.2rem}
+.soc{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:.85rem;cursor:pointer;transition:all .2s}
+.soc:hover{background:var(--sage)}
+.footer-col h5{font-size:.85rem;font-weight:600;color:var(--white);margin-bottom:1rem;letter-spacing:.03em}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.footer-col a{text-decoration:none;font-size:.83rem;color:var(--lime);transition:color .2s}
+.footer-col a:hover{color:var(--mint)}
+.footer-contact p{font-size:.83rem;color:var(--lime);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:#4a6a52;flex-wrap:wrap;gap:.5rem}
+
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:900px){
+  .hero-card-wrap{display:none}
+  h1{font-size:clamp(2.6rem,8vw,4rem)}
+  .wizard-wrap{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .steps-wrap::before{display:none}
+  .nav-links{display:none}
+}
+@media(max-width:600px){
+  .service-picker,.extras-grid{grid-template-columns:1fr 1fr}
+  .field-row{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+  .time-grid{grid-template-columns:1fr 1fr}
+}
+</style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="logo">XYZ<span>.</span></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="progress-bar" id="progressBar"></div>
+
+<nav id="navbar">
+  <div class="logo">XYZ<div class="logo-dot"></div></div>
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
+    <li><a href="#book">Book</a></li>
     <li><a href="#why">About</a></li>
     <li><a href="#process">How It Works</a></li>
-    <li><a href="#book">Book</a></li>
+    <li><a href="#faq">FAQ</a></li>
   </ul>
-  <a href="#book" class="nav-cta">Get a Quote</a>
+  <a href="#book" class="nav-cta">Book Now</a>
 </nav>
 
-<!-- HERO -->
+<div class="float-badge" onclick="document.getElementById('book').scrollIntoView({behavior:'smooth'})">
+  📅 Book a Clean
+</div>
+
 <header>
-  <div class="hero-text">
-    <div class="hero-badge">Professional Cleaning</div>
-    <h1>A <em>cleaner</em> home,<br>a clearer mind.</h1>
-    <p class="hero-sub">XYZ Cleaning delivers spotless results with eco-friendly products, trained professionals, and a 100% satisfaction guarantee — every single visit.</p>
-    <div class="hero-btns">
-      <a href="#book" class="btn-primary">Book a Clean</a>
-      <a href="#services" class="btn-outline">Our Services</a>
+  <div class="hero-bg"></div>
+  <div class="hero-blob"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span class="sparkle">✦</span> Trusted Since 2019</div>
+    <h1>A <em>cleaner</em> space,<br><span class="line2">a happier you.</span></h1>
+    <p class="hero-sub">Professional, eco-friendly cleaning delivered by vetted experts — on your schedule, with your satisfaction guaranteed every single visit.</p>
+    <div class="hero-actions">
+      <a href="#book" class="btn-main">Book a Clean <span>→</span></a>
+      <a href="#services" class="btn-ghost">View Services <span>↓</span></a>
+    </div>
+    <div class="trust-strip">
+      <div class="trust-item"><div class="trust-icon">✓</div> 100% Vetted Staff</div>
+      <div class="trust-item"><div class="trust-icon">🌿</div> Eco Products</div>
+      <div class="trust-item"><div class="trust-icon">★</div> 4.9 / 5 Rating</div>
+      <div class="trust-item"><div class="trust-icon">↩</div> Free Re-clean</div>
     </div>
   </div>
-
-  <div class="hero-visual">
+  <div class="hero-card-wrap">
     <div class="hero-card">
-      <div class="hero-card-icon">🏡</div>
-      <h3>Trusted by 2,000+ homeowners</h3>
-      <p>From regular maintenance cleans to deep one-off jobs, we handle it all — reliably and thoroughly.</p>
-      <div class="stars">★★★★★</div>
-      <div class="review-count">4.9 / 5 from 1,240 reviews</div>
-      <div class="stat-row">
-        <div class="stat">
-          <div class="stat-num">8k+</div>
-          <div class="stat-label">Cleans done</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">98%</div>
-          <div class="stat-label">Satisfaction</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">5yr</div>
-          <div class="stat-label">In business</div>
-        </div>
+      <div class="card-top">
+        <div class="card-rating">★ 4.9 / 5</div>
+        <div class="card-icon">🏡</div>
+      </div>
+      <div class="card-title">Loved by 2,000+ homeowners</div>
+      <div class="card-sub">Spotless results, every time. Trusted across West London and the Thames Valley.</div>
+      <div class="card-stats">
+        <div class="cstat"><div class="cstat-n">8k+</div><div class="cstat-l">Cleans done</div></div>
+        <div class="cstat"><div class="cstat-n">98%</div><div class="cstat-l">Satisfaction</div></div>
+        <div class="cstat"><div class="cstat-n">5yr</div><div class="cstat-l">Experience</div></div>
+      </div>
+      <div class="card-avatars">
+        <div class="av">SR</div><div class="av">JP</div><div class="av">AM</div><div class="av">KL</div>
+        <span class="av-text">+1,996 happy clients</span>
       </div>
     </div>
   </div>
 </header>
 
 <!-- SERVICES -->
-<section class="services" id="services">
-  <div class="section-tag">What We Offer</div>
-  <h2 class="section-title">Cleaning for every space</h2>
-  <p class="section-sub">Whether it's your home, rental, or office, our trained team brings the same meticulous care and attention to detail every time.</p>
-
+<section class="services-section" id="services">
+  <div class="stag reveal">Our Services</div>
+  <h2 class="reveal">Every clean covered</h2>
+  <p class="sdesc reveal">From a weekly tidy to a full end-of-tenancy deep clean — we bring the same care and precision every time.</p>
   <div class="services-grid">
-    <div class="service-card">
-      <div class="service-icon">🧹</div>
-      <h3>Regular Home Clean</h3>
-      <p>Weekly, fortnightly, or monthly — we keep your living spaces consistently fresh and hygienic so you never have to worry.</p>
-      <span class="service-price">From £65</span>
+    <div class="scard reveal"><div class="scard-glow"></div><div class="scard-icon">🧹</div><h3>Regular Home Clean</h3><p>Flexible weekly, fortnightly, or monthly visits to keep your home consistently fresh and hygienic.</p><div class="scard-footer"><div class="scard-price">£65 <span>/ visit</span></div><div class="scard-tag">Popular</div></div></div>
+    <div class="scard reveal"><div class="scard-glow"></div><div class="scard-icon">🔍</div><h3>Deep Clean</h3><p>Top-to-bottom intensive clean tackling limescale, grout, appliances, and every hidden surface.</p><div class="scard-footer"><div class="scard-price">£140 <span>/ session</span></div><div class="scard-tag">Thorough</div></div></div>
+    <div class="scard reveal"><div class="scard-glow"></div><div class="scard-icon">🏠</div><h3>End of Tenancy</h3><p>Landlord-approved cleaning that maximises deposit returns and passes even the toughest inventory checks.</p><div class="scard-footer"><div class="scard-price">£180 <span>/ property</span></div><div class="scard-tag">Guaranteed</div></div></div>
+    <div class="scard reveal"><div class="scard-glow"></div><div class="scard-icon">🏢</div><h3>Office Cleaning</h3><p>Daily or weekly commercial cleaning keeping your workspace professional, healthy, and welcoming.</p><div class="scard-footer"><div class="scard-price">Custom <span>quote</span></div><div class="scard-tag">Business</div></div></div>
+    <div class="scard reveal"><div class="scard-glow"></div><div class="scard-icon">🪟</div><h3>Window Cleaning</h3><p>Streak-free internal and external windows using purified water for a crystal-clear finish.</p><div class="scard-footer"><div class="scard-price">£45 <span>/ session</span></div><div class="scard-tag">Sparkling</div></div></div>
+    <div class="scard reveal"><div class="scard-glow"></div><div class="scard-icon">🛋️</div><h3>Carpet & Upholstery</h3><p>Hot water extraction lifts stains, allergens, and odours from carpets, sofas, rugs, and mattresses.</p><div class="scard-footer"><div class="scard-price">£80 <span>/ room</span></div><div class="scard-tag">Fresh</div></div></div>
+  </div>
+</section>
+
+<!-- BOOKING WIZARD -->
+<section class="booking-section" id="book">
+  <div class="wizard-wrap">
+    <div class="wizard-info reveal">
+      <div class="stag">Book Online</div>
+      <h2>Get your instant quote</h2>
+      <p class="sdesc" style="margin-bottom:1.5rem">No phone calls needed. Choose your service, pick a time, and we'll confirm within minutes.</p>
+      <ul class="benefit-list">
+        <li><div class="benefit-icon">⚡</div> Instant online booking — no waiting</li>
+        <li><div class="benefit-icon">📅</div> Choose your exact date &amp; time slot</li>
+        <li><div class="benefit-icon">🔁</div> Easy rescheduling anytime</li>
+        <li><div class="benefit-icon">💳</div> Secure payment, pay after the clean</li>
+        <li><div class="benefit-icon">✅</div> 100% satisfaction guarantee</li>
+        <li><div class="benefit-icon">🌿</div> Eco-friendly products always</li>
+      </ul>
     </div>
-    <div class="service-card">
-      <div class="service-icon">🔍</div>
-      <h3>Deep Clean</h3>
-      <p>A thorough top-to-bottom clean tackling limescale, grout, appliances, and every hidden corner. Perfect for a proper reset.</p>
-      <span class="service-price">From £140</span>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🏠</div>
-      <h3>End of Tenancy</h3>
-      <p>Landlord and letting agency approved. We ensure the property is spotless for inspections and maximise deposit returns.</p>
-      <span class="service-price">From £180</span>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🏢</div>
-      <h3>Office Cleaning</h3>
-      <p>Daily or weekly commercial cleaning to keep your workplace professional, healthy, and welcoming for staff and visitors alike.</p>
-      <span class="service-price">Custom quote</span>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🪟</div>
-      <h3>Window Cleaning</h3>
-      <p>Streak-free internal and external window cleaning using purified water technology for a crystal-clear finish.</p>
-      <span class="service-price">From £45</span>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🛋️</div>
-      <h3>Carpet & Upholstery</h3>
-      <p>Hot water extraction and professional cleaning to lift stains, allergens, and odours from carpets, sofas, and rugs.</p>
-      <span class="service-price">From £80</span>
+
+    <div class="wizard-card reveal">
+      <div class="wizard-steps">
+        <button class="wizard-step-btn active" onclick="goStep(1)">1. Service</button>
+        <button class="wizard-step-btn" onclick="goStep(2)">2. Schedule</button>
+        <button class="wizard-step-btn" onclick="goStep(3)">3. Details</button>
+        <button class="wizard-step-btn" onclick="goStep(4)">4. Confirm</button>
+      </div>
+
+      <!-- STEP 1 -->
+      <div class="wizard-panel active" id="step1">
+        <div class="stag" style="margin-bottom:.8rem">What do you need?</div>
+        <div class="service-picker">
+          <div class="spick" onclick="pickService(this,'Regular Home Clean',65)"><div class="spick-icon">🧹</div><div class="spick-name">Regular Clean</div><div class="spick-price">From £65</div></div>
+          <div class="spick" onclick="pickService(this,'Deep Clean',140)"><div class="spick-icon">🔍</div><div class="spick-name">Deep Clean</div><div class="spick-price">From £140</div></div>
+          <div class="spick" onclick="pickService(this,'End of Tenancy',180)"><div class="spick-icon">🏠</div><div class="spick-name">End of Tenancy</div><div class="spick-price">From £180</div></div>
+          <div class="spick" onclick="pickService(this,'Office Cleaning',0)"><div class="spick-icon">🏢</div><div class="spick-name">Office Clean</div><div class="spick-price">Custom quote</div></div>
+          <div class="spick" onclick="pickService(this,'Window Cleaning',45)"><div class="spick-icon">🪟</div><div class="spick-name">Windows</div><div class="spick-price">From £45</div></div>
+          <div class="spick" onclick="pickService(this,'Carpet & Upholstery',80)"><div class="spick-icon">🛋️</div><div class="spick-name">Carpet &amp; Sofa</div><div class="spick-price">From £80</div></div>
+        </div>
+        <div class="field-group"><label>🛏️ Bedrooms</label>
+          <div class="room-counter"><label>Number of bedrooms</label><div class="counter-ctrl"><button class="cnt-btn" onclick="changeCount('beds',-1)">−</button><div class="cnt-val" id="bedsVal">2</div><button class="cnt-btn" onclick="changeCount('beds',1)">+</button></div></div>
+        </div>
+        <div class="field-group"><label>🛁 Bathrooms</label>
+          <div class="room-counter"><label>Number of bathrooms</label><div class="counter-ctrl"><button class="cnt-btn" onclick="changeCount('baths',-1)">−</button><div class="cnt-val" id="bathsVal">1</div><button class="cnt-btn" onclick="changeCount('baths',1)">+</button></div></div>
+        </div>
+        <div class="field-group"><label>How often?</label>
+          <div class="freq-row">
+            <div class="freq-btn selected" onclick="pickFreq(this,'One-off',0)">One-off</div>
+            <div class="freq-btn" onclick="pickFreq(this,'Weekly',10)">Weekly<span class="freq-badge">Save 10%</span></div>
+            <div class="freq-btn" onclick="pickFreq(this,'Fortnightly',8)">Fortnightly<span class="freq-badge">Save 8%</span></div>
+            <div class="freq-btn" onclick="pickFreq(this,'Monthly',5)">Monthly<span class="freq-badge">Save 5%</span></div>
+          </div>
+        </div>
+        <div class="wizard-nav"><div></div><button class="wiz-next" onclick="goStep(2)">Next: Schedule →</button></div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="wizard-panel" id="step2">
+        <div class="stag" style="margin-bottom:.8rem">Pick your slot</div>
+        <div class="field-row">
+          <div class="field-group"><label>📅 Date</label><input type="date" id="dateInput"/></div>
+          <div class="field-group"><label>📍 Postcode</label><input type="text" placeholder="e.g. TW3 1AA" id="postInput"/></div>
+        </div>
+        <div class="field-group"><label>⏰ Preferred Time Slot</label></div>
+        <div class="time-grid">
+          <div class="time-slot" onclick="pickTime(this,'08:00–10:00')">🌅 8:00–10:00<br><small style="font-weight:400;font-size:.65rem">Early bird</small></div>
+          <div class="time-slot" onclick="pickTime(this,'10:00–12:00')">☀️ 10:00–12:00<br><small style="font-weight:400;font-size:.65rem">Morning</small></div>
+          <div class="time-slot" onclick="pickTime(this,'12:00–14:00')">🌤 12:00–14:00<br><small style="font-weight:400;font-size:.65rem">Midday</small></div>
+          <div class="time-slot" onclick="pickTime(this,'14:00–16:00')">🌞 14:00–16:00<br><small style="font-weight:400;font-size:.65rem">Afternoon</small></div>
+          <div class="time-slot" onclick="pickTime(this,'16:00–18:00')">🌇 16:00–18:00<br><small style="font-weight:400;font-size:.65rem">Late afternoon</small></div>
+          <div class="time-slot unavailable">🌆 18:00–20:00<br><small style="font-weight:400;font-size:.65rem">Unavailable</small></div>
+        </div>
+        <div class="field-group"><label>✨ Add-on Extras</label></div>
+        <div class="extras-grid">
+          <div class="extra-item" onclick="toggleExtra(this,'Inside Oven',20)"><div class="extra-cb">✓</div><div><div class="extra-name">🔥 Inside Oven</div><div class="extra-price">+£20</div></div></div>
+          <div class="extra-item" onclick="toggleExtra(this,'Inside Fridge',15)"><div class="extra-cb">✓</div><div><div class="extra-name">🧊 Inside Fridge</div><div class="extra-price">+£15</div></div></div>
+          <div class="extra-item" onclick="toggleExtra(this,'Ironing 1hr',25)"><div class="extra-cb">✓</div><div><div class="extra-name">👔 Ironing (1hr)</div><div class="extra-price">+£25</div></div></div>
+          <div class="extra-item" onclick="toggleExtra(this,'Laundry',20)"><div class="extra-cb">✓</div><div><div class="extra-name">🧺 Laundry</div><div class="extra-price">+£20</div></div></div>
+          <div class="extra-item" onclick="toggleExtra(this,'Balcony/Patio',18)"><div class="extra-cb">✓</div><div><div class="extra-name">🌿 Balcony/Patio</div><div class="extra-price">+£18</div></div></div>
+          <div class="extra-item" onclick="toggleExtra(this,'Interior Windows',30)"><div class="extra-cb">✓</div><div><div class="extra-name">🪟 Interior Windows</div><div class="extra-price">+£30</div></div></div>
+        </div>
+        <div class="wizard-nav"><button class="wiz-back" onclick="goStep(1)">← Back</button><button class="wiz-next" onclick="goStep(3)">Next: Your Details →</button></div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="wizard-panel" id="step3">
+        <div class="stag" style="margin-bottom:.8rem">Your information</div>
+        <div class="field-row">
+          <div class="field-group"><label>First Name</label><input type="text" placeholder="Jane" id="fn"/></div>
+          <div class="field-group"><label>Last Name</label><input type="text" placeholder="Smith" id="ln"/></div>
+        </div>
+        <div class="field-row">
+          <div class="field-group"><label>Email</label><input type="email" placeholder="jane@example.com" id="em"/></div>
+          <div class="field-group"><label>Phone</label><input type="tel" placeholder="07700 000000" id="ph"/></div>
+        </div>
+        <div class="field-group"><label>Full Address</label><input type="text" placeholder="14 Green Lane, Hounslow, TW3 1AA" id="addr"/></div>
+        <div class="field-group"><label>Access Instructions</label><input type="text" placeholder="e.g. Key under mat, dog called Biscuit — very friendly!"/></div>
+        <div class="field-group"><label>Anything else we should know?</label><textarea placeholder="Specific areas of concern, allergies, products to avoid…"></textarea></div>
+        <div class="field-group" style="display:flex;align-items:center;gap:.6rem;margin-top:.5rem">
+          <input type="checkbox" id="terms" style="width:auto;padding:0;border-radius:4px"/>
+          <label for="terms" style="font-size:.8rem;color:#5a7a6a;margin:0;font-weight:400">I agree to the <a href="#" style="color:var(--sage)">terms &amp; conditions</a> and <a href="#" style="color:var(--sage)">privacy policy</a></label>
+        </div>
+        <div class="wizard-nav"><button class="wiz-back" onclick="goStep(2)">← Back</button><button class="wiz-next" onclick="goStep(4)">Review Booking →</button></div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="wizard-panel" id="step4">
+        <div class="stag" style="margin-bottom:.8rem">Your booking summary</div>
+        <div class="price-summary" id="summaryBox">
+          <div class="price-row"><span>Service</span><span id="s-service">—</span></div>
+          <div class="price-row"><span>Bedrooms / Bathrooms</span><span id="s-rooms">—</span></div>
+          <div class="price-row"><span>Frequency</span><span id="s-freq">—</span></div>
+          <div class="price-row"><span>Date &amp; Time</span><span id="s-datetime">—</span></div>
+          <div class="price-row"><span>Extras</span><span id="s-extras">None</span></div>
+          <div class="price-row"><span>Base Price</span><span id="s-base">—</span></div>
+          <div class="price-row"><span>Extras Total</span><span id="s-extratotal">£0</span></div>
+          <div class="price-row total"><span>Total <span class="discount-tag" id="s-discount" style="display:none"></span></span><span id="s-total" style="font-family:'Cormorant Garamond',serif;font-size:1.4rem">—</span></div>
+        </div>
+        <button class="wiz-next" style="width:100%;justify-content:center;padding:1.1rem;font-size:.95rem" onclick="confirmBooking()">✓ Confirm &amp; Book</button>
+        <p style="text-align:center;font-size:.75rem;color:#7a9a8a;margin-top:.8rem">You won't be charged until after your clean. Easy cancellation up to 24hrs before.</p>
+        <div class="wizard-nav" style="margin-top:.5rem"><button class="wiz-back" onclick="goStep(3)">← Back</button><div></div></div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- WHY US -->
-<section class="why" id="why">
-  <div class="section-tag">Why XYZ</div>
-  <h2 class="section-title">The XYZ difference</h2>
-  <p class="section-sub" style="margin-bottom:3.5rem">We don't just clean — we care. Every detail of how we work is built around your trust, comfort, and satisfaction.</p>
-
+<section class="why-section" id="why">
+  <div class="stag reveal">Why XYZ</div>
+  <h2 class="reveal">The XYZ difference</h2>
+  <p class="sdesc reveal">We're not just another cleaning company. Every detail of how we operate is built around your trust and peace of mind.</p>
   <div class="why-grid">
-    <div class="why-item">
-      <div class="why-num">01</div>
-      <h4>Vetted & Insured Team</h4>
-      <p>Every cleaner is background-checked, fully insured, and trained to our exacting standards before entering your home.</p>
-    </div>
-    <div class="why-item">
-      <div class="why-num">02</div>
-      <h4>Eco-Friendly Products</h4>
-      <p>We use plant-based, biodegradable cleaning solutions that are tough on dirt but kind to your family, pets, and the planet.</p>
-    </div>
-    <div class="why-item">
-      <div class="why-num">03</div>
-      <h4>Satisfaction Guaranteed</h4>
-      <p>Not happy with something? We'll return within 24 hours to make it right, free of charge. No questions asked.</p>
-    </div>
-    <div class="why-item">
-      <div class="why-num">04</div>
-      <h4>Flexible Scheduling</h4>
-      <p>Book online in minutes. Choose the day, time, and frequency that fits your life — and reschedule whenever you need.</p>
-    </div>
+    <div class="why-card reveal"><div class="why-no">01</div><h4>Fully Vetted Team</h4><p>Every cleaner is DBS checked, reference verified, and trained to our standards before entering your home.</p></div>
+    <div class="why-card reveal"><div class="why-no">02</div><h4>Eco-Friendly Always</h4><p>Plant-based, biodegradable products that are tough on dirt, kind to your family and pets, and gentle on the planet.</p></div>
+    <div class="why-card reveal"><div class="why-no">03</div><h4>Satisfaction Guaranteed</h4><p>Not 100% happy? We'll return within 24 hours and make it right at no charge. We stand behind every clean.</p></div>
+    <div class="why-card reveal"><div class="why-no">04</div><h4>Fully Insured</h4><p>Public liability and employer liability insurance gives you complete peace of mind on every visit.</p></div>
+    <div class="why-card reveal"><div class="why-no">05</div><h4>Flexible Scheduling</h4><p>Book, reschedule, or cancel online anytime. We adapt to your life — not the other way around.</p></div>
+    <div class="why-card reveal"><div class="why-no">06</div><h4>Consistent Cleaners</h4><p>We aim to send the same team member each visit so they learn your home and your preferences over time.</p></div>
   </div>
 </section>
 
 <!-- PROCESS -->
-<section class="process" id="process">
-  <div class="section-tag">How It Works</div>
-  <h2 class="section-title">Simple from the start</h2>
-  <p class="section-sub">Four easy steps stand between you and a beautifully clean home.</p>
-
-  <div class="steps">
-    <div class="step">
-      <div class="step-dot">1</div>
-      <h4>Book Online</h4>
-      <p>Fill in our simple form with your address, service type, and preferred time. Takes under 2 minutes.</p>
-    </div>
-    <div class="step">
-      <div class="step-dot">2</div>
-      <h4>Get Confirmed</h4>
-      <p>You'll receive an instant confirmation email with your cleaner's name, photo, and arrival window.</p>
-    </div>
-    <div class="step">
-      <div class="step-dot">3</div>
-      <h4>We Clean</h4>
-      <p>Our professional arrives on time with all equipment and products ready. You can be in or out — your choice.</p>
-    </div>
-    <div class="step">
-      <div class="step-dot">4</div>
-      <h4>Enjoy &amp; Review</h4>
-      <p>Come home to a spotless space. Leave feedback and easily rebook for your next clean with one tap.</p>
-    </div>
+<section class="process-section" id="process">
+  <div class="stag reveal">How It Works</div>
+  <h2 class="reveal">From booking to spotless in 4 steps</h2>
+  <p class="sdesc reveal">Simple, transparent, and stress-free from start to finish.</p>
+  <div class="steps-wrap">
+    <div class="step-item reveal"><div class="step-dot">1</div><h4>Book Online</h4><p>Use our smart booking wizard — choose your service, rooms, extras, date, and time slot in under 3 minutes.</p></div>
+    <div class="step-item reveal"><div class="step-dot">2</div><h4>Get Confirmed</h4><p>Instant email confirmation with your cleaner's name, photo ID, and a precise arrival window.</p></div>
+    <div class="step-item reveal"><div class="step-dot">3</div><h4>We Clean</h4><p>Your professional arrives fully equipped. In, out, done — you don't even need to be home if you prefer.</p></div>
+    <div class="step-item reveal"><div class="step-dot">4</div><h4>Enjoy &amp; Rebook</h4><p>Come home to a spotless space. Rate your clean, pay securely online, and rebook in one tap.</p></div>
   </div>
 </section>
 
 <!-- TESTIMONIALS -->
-<section class="testimonials">
-  <div class="section-tag">Reviews</div>
-  <h2 class="section-title">What our clients say</h2>
-  <p class="section-sub" style="margin-bottom:3rem">Real feedback from real customers who trust XYZ with their homes.</p>
-
-  <div class="testimonials-grid">
-    <div class="tcard">
-      <p class="tcard-quote">XYZ have been cleaning our house fortnightly for over a year. The consistency is incredible — it always looks immaculate. Wouldn't use anyone else.</p>
-      <div class="tcard-author">
-        <div class="avatar">SR</div>
-        <div>
-          <div class="author-name">Sarah R.</div>
-          <div class="author-loc">Hounslow</div>
-        </div>
-      </div>
-    </div>
-    <div class="tcard">
-      <p class="tcard-quote">Booked the end-of-tenancy clean on short notice and the team were phenomenal. Landlord was delighted and I got my full deposit back. Brilliant service.</p>
-      <div class="tcard-author">
-        <div class="avatar">JM</div>
-        <div>
-          <div class="author-name">James M.</div>
-          <div class="author-loc">Richmond</div>
-        </div>
-      </div>
-    </div>
-    <div class="tcard">
-      <p class="tcard-quote">The deep clean was worth every penny. They cleaned things I had completely forgotten about. The kitchen and bathrooms look brand new. Absolutely recommend.</p>
-      <div class="tcard-author">
-        <div class="avatar">AP</div>
-        <div>
-          <div class="author-name">Amelia P.</div>
-          <div class="author-loc">Twickenham</div>
-        </div>
-      </div>
-    </div>
+<section class="testi-section">
+  <div class="stag reveal">Customer Reviews</div>
+  <h2 class="reveal">What our clients say</h2>
+  <p class="sdesc reveal" style="margin-bottom:3rem">Real reviews from real people who trust XYZ with their homes every week.</p>
+  <div class="testi-grid">
+    <div class="tcard reveal"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">XYZ have been cleaning our house fortnightly for over a year. The consistency is incredible — it always looks immaculate. The team are friendly, reliable, and genuinely care about the job.</p><div class="tcard-author"><div class="tav">SR</div><div><div class="tav-name">Sarah R.</div><div class="tav-loc">📍 Hounslow · Regular Clean</div></div></div></div>
+    <div class="tcard reveal"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">Booked the end-of-tenancy clean on short notice. The team were phenomenal. Landlord was delighted, I got my full deposit back without a single issue. Absolutely brilliant service.</p><div class="tcard-author"><div class="tav">JM</div><div><div class="tav-name">James M.</div><div class="tav-loc">📍 Richmond · End of Tenancy</div></div></div></div>
+    <div class="tcard reveal"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">The deep clean was worth every penny. The oven looked brand new, the bathroom tiles sparkled, and they even cleaned behind the fridge. My flat has never looked this good.</p><div class="tcard-author"><div class="tav">AP</div><div><div class="tav-name">Amelia P.</div><div class="tav-loc">📍 Twickenham · Deep Clean</div></div></div></div>
   </div>
 </section>
 
-<!-- BOOKING FORM -->
-<section id="book">
-  <div class="book-inner">
-    <div class="section-tag">Book Now</div>
-    <h2 class="section-title">Get your free quote</h2>
-    <p class="section-sub">Fill in the form below and we'll get back to you within the hour with a personalised quote.</p>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label for="fname">First Name</label>
-        <input type="text" id="fname" placeholder="Jane"/>
-      </div>
-      <div class="form-group">
-        <label for="lname">Last Name</label>
-        <input type="text" id="lname" placeholder="Smith"/>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="jane@example.com"/>
-      </div>
-      <div class="form-group">
-        <label for="phone">Phone</label>
-        <input type="tel" id="phone" placeholder="07700 000000"/>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="service">Service Required</label>
-      <select id="service">
-        <option value="">Select a service…</option>
-        <option>Regular Home Clean</option>
-        <option>Deep Clean</option>
-        <option>End of Tenancy</option>
-        <option>Office Cleaning</option>
-        <option>Window Cleaning</option>
-        <option>Carpet & Upholstery</option>
-      </select>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label for="postcode">Postcode</label>
-        <input type="text" id="postcode" placeholder="TW3 1AA"/>
-      </div>
-      <div class="form-group">
-        <label for="date">Preferred Date</label>
-        <input type="date" id="date"/>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="notes">Additional Notes</label>
-      <textarea id="notes" placeholder="Anything we should know — pets, access instructions, specific areas of concern…"></textarea>
-    </div>
-    <button class="submit-btn" onclick="handleSubmit()">Request My Free Quote →</button>
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="stag reveal">FAQ</div>
+  <h2 class="reveal">Common questions</h2>
+  <p class="sdesc reveal">Everything you need to know before you book.</p>
+  <div class="faq-wrap reveal">
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Do I need to be home during the clean? <div class="faq-icon">+</div></button><div class="faq-a">Not at all! Many of our clients provide access instructions and we handle everything while they're at work or out. Just let us know your preference when booking and we'll arrange it seamlessly.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What cleaning products do you use? <div class="faq-icon">+</div></button><div class="faq-a">We use professional-grade, eco-friendly, plant-based products that are safe for children, pets, and the environment. If you have specific allergies or preferences, just let us know in your booking notes.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How do I pay? <div class="faq-icon">+</div></button><div class="faq-a">We never take payment upfront. After your clean is complete and you're happy, you pay securely online via card or bank transfer. We'll email you a receipt automatically.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I cancel or reschedule? <div class="faq-icon">+</div></button><div class="faq-a">Yes, absolutely. We ask for at least 24 hours notice to cancel or reschedule without any charge. You can manage your bookings easily online or by calling us directly.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What if I'm not happy with my clean? <div class="faq-icon">+</div></button><div class="faq-a">We offer a 100% satisfaction guarantee. If something wasn't up to standard, just contact us within 24 hours and we'll return to put it right at absolutely no extra charge.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Are your cleaners insured and vetted? <div class="faq-icon">+</div></button><div class="faq-a">Every member of our team is DBS (criminal record) checked, reference verified, and fully insured with public liability cover. You're in completely safe hands.</div></div>
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- COVERAGE -->
+<section class="coverage-section">
+  <div class="stag reveal">Coverage</div>
+  <h2 class="reveal">Areas we serve</h2>
+  <p class="sdesc reveal" style="margin-bottom:1rem">We cover West London and the Thames Valley. Can't see your area? Give us a call — we may still be able to help.</p>
+  <div class="areas-wrap reveal">
+    <div class="area-tag">Hounslow</div><div class="area-tag">Richmond</div><div class="area-tag">Twickenham</div>
+    <div class="area-tag">Kingston</div><div class="area-tag">Ealing</div><div class="area-tag">Chiswick</div>
+    <div class="area-tag">Brentford</div><div class="area-tag">Isleworth</div><div class="area-tag">Feltham</div>
+    <div class="area-tag">Hampton</div><div class="area-tag">Staines</div><div class="area-tag">Windsor</div>
+    <div class="area-tag">Slough</div><div class="area-tag">Hayes</div><div class="area-tag">Southall</div>
+    <div class="area-tag">Hammersmith</div><div class="area-tag">Fulham</div><div class="area-tag">Putney</div>
+  </div>
+</section>
+
 <footer>
-  <div class="footer-top">
+  <div class="footer-grid">
     <div class="footer-brand">
-      <div class="logo">XYZ<span style="color:var(--sage)">.</span></div>
-      <p>Professional cleaning services across London and surrounding areas. Trusted, insured, and satisfaction guaranteed.</p>
+      <div class="logo" style="color:var(--mint)">XYZ<div class="logo-dot"></div></div>
+      <p>Professional, eco-friendly cleaning across West London. Trusted since 2019.</p>
+      <div class="footer-social">
+        <div class="soc">📘</div><div class="soc">📸</div><div class="soc">🐦</div><div class="soc">⭐</div>
+      </div>
     </div>
     <div class="footer-col">
       <h5>Services</h5>
@@ -592,6 +545,8 @@
         <li><a href="#services">Deep Clean</a></li>
         <li><a href="#services">End of Tenancy</a></li>
         <li><a href="#services">Office Cleaning</a></li>
+        <li><a href="#services">Window Cleaning</a></li>
+        <li><a href="#services">Carpet &amp; Upholstery</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -601,35 +556,147 @@
         <li><a href="#process">How It Works</a></li>
         <li><a href="#">Careers</a></li>
         <li><a href="#">Blog</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#">Gift Cards</a></li>
       </ul>
     </div>
-    <div class="footer-col">
-      <h5>Contact</h5>
-      <ul>
-        <li><a href="tel:02012345678">020 1234 5678</a></li>
-        <li><a href="mailto:hello@xyzclean.co.uk">hello@xyzclean.co.uk</a></li>
-        <li><a href="#">Instagram</a></li>
-        <li><a href="#">Facebook</a></li>
-      </ul>
+    <div class="footer-col footer-contact">
+      <h5>Get In Touch</h5>
+      <p>📞 <a href="tel:02012345678" style="color:var(--lime)">020 1234 5678</a></p>
+      <p>✉️ <a href="mailto:hello@xyzclean.co.uk" style="color:var(--lime)">hello@xyzclean.co.uk</a></p>
+      <p>⏰ Mon–Sat: 8am – 7pm</p>
+      <p>📍 Based in Hounslow, London</p>
+      <p style="margin-top:.8rem;font-size:.75rem;color:#4a6a52">Company No. 12345678<br>Registered in England &amp; Wales</p>
     </div>
   </div>
   <div class="footer-bottom">
     <span>© 2026 XYZ Cleaning Ltd. All rights reserved.</span>
-    <span>Privacy Policy · Terms & Conditions</span>
+    <span><a href="#" style="color:#4a6a52">Privacy Policy</a> · <a href="#" style="color:#4a6a52">Terms</a> · <a href="#" style="color:#4a6a52">Cookies</a></span>
   </div>
 </footer>
 
 <script>
-  function handleSubmit() {
-    const fname = document.getElementById('fname').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const service = document.getElementById('service').value;
-    if (!fname || !email || !service) {
-      alert('Please fill in your name, email, and service type.');
-      return;
-    }
-    alert(`Thanks, ${fname}! We've received your quote request and will be in touch shortly.`);
-  }
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX - 6 + 'px';
+  cursor.style.top = e.clientY - 6 + 'px';
+  ring.style.left = e.clientX - 18 + 'px';
+  ring.style.top = e.clientY - 18 + 'px';
+});
+document.querySelectorAll('a,button,.spick,.scard,.tcard,.area-tag,.time-slot,.extra-item,.freq-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.transform='scale(2.5)'; ring.style.opacity='0'; });
+  el.addEventListener('mouseleave', () => { cursor.style.transform='scale(1)'; ring.style.opacity='.6'; });
+});
+
+// Scroll effects
+window.addEventListener('scroll', () => {
+  const s = document.documentElement.scrollTop;
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('progressBar').style.width = (s/h*100) + '%';
+  document.getElementById('navbar').classList.toggle('scrolled', s > 60);
+});
+
+// Set min date
+const dateInput = document.getElementById('dateInput');
+const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+dateInput.min = tomorrow.toISOString().split('T')[0];
+
+// Wizard state
+let state = { service:'', basePrice:0, beds:2, baths:1, freq:'One-off', discount:0, time:'', extras:[], extrasTotal:0 };
+
+function goStep(n) {
+  document.querySelectorAll('.wizard-panel').forEach((p,i) => p.classList.toggle('active', i===n-1));
+  document.querySelectorAll('.wizard-step-btn').forEach((b,i) => b.classList.toggle('active', i===n-1));
+  if (n===4) buildSummary();
+  document.querySelector('.wizard-card').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function pickService(el, name, price) {
+  document.querySelectorAll('.spick').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+  state.service = name; state.basePrice = price;
+}
+function changeCount(type, delta) {
+  if (type==='beds') { state.beds = Math.max(1, Math.min(10, state.beds+delta)); document.getElementById('bedsVal').textContent = state.beds; }
+  else { state.baths = Math.max(1, Math.min(6, state.baths+delta)); document.getElementById('bathsVal').textContent = state.baths; }
+}
+function pickFreq(el, name, pct) {
+  document.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  state.freq = name; state.discount = pct;
+}
+function pickTime(el, time) {
+  if (el.classList.contains('unavailable')) return;
+  document.querySelectorAll('.time-slot:not(.unavailable)').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  state.time = time;
+}
+function toggleExtra(el, name, price) {
+  el.classList.toggle('selected');
+  if (el.classList.contains('selected')) { state.extras.push(name); state.extrasTotal += price; }
+  else { state.extras = state.extras.filter(e=>e!==name); state.extrasTotal -= price; }
+}
+
+function buildSummary() {
+  const bedExtra = Math.max(0, (state.beds-2)*15);
+  const bathExtra = Math.max(0, (state.baths-1)*20);
+  const base = state.basePrice + bedExtra + bathExtra;
+  const discountAmt = state.discount > 0 ? Math.round(base * state.discount / 100) : 0;
+  const total = base - discountAmt + state.extrasTotal;
+  const dateVal = document.getElementById('dateInput').value;
+
+  document.getElementById('s-service').textContent = state.service || '—';
+  document.getElementById('s-rooms').textContent = state.beds + ' bed / ' + state.baths + ' bath';
+  document.getElementById('s-freq').textContent = state.freq;
+  document.getElementById('s-datetime').textContent = (dateVal||'TBC') + ' · ' + (state.time||'TBC');
+  document.getElementById('s-extras').textContent = state.extras.length ? state.extras.join(', ') : 'None';
+  document.getElementById('s-base').textContent = base > 0 ? '£'+base : '—';
+  document.getElementById('s-extratotal').textContent = '£'+state.extrasTotal;
+  const disc = document.getElementById('s-discount');
+  if (state.discount > 0) { disc.style.display='inline'; disc.textContent='-'+state.discount+'%'; } else { disc.style.display='none'; }
+  document.getElementById('s-total').textContent = total > 0 ? '£'+total : 'Custom quote';
+}
+
+function confirmBooking() {
+  const fn = document.getElementById('fn').value.trim();
+  const em = document.getElementById('em').value.trim();
+  if (!state.service) { alert('Please select a service in Step 1!'); goStep(1); return; }
+  if (!state.time) { alert('Please pick a time slot in Step 2!'); goStep(2); return; }
+  if (!fn || !em) { alert('Please fill in your name and email in Step 3!'); goStep(3); return; }
+  if (!document.getElementById('terms').checked) { alert('Please agree to the terms & conditions.'); return; }
+  const dateVal = document.getElementById('dateInput').value;
+  document.querySelector('.wizard-card').innerHTML = `
+    <div style="text-align:center;padding:2rem 1rem">
+      <div style="font-size:4rem;margin-bottom:1rem">🎉</div>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--forest);margin-bottom:.6rem">Booking Confirmed!</h3>
+      <p style="font-size:.9rem;color:#5a7a6a;line-height:1.7;margin-bottom:1.5rem">
+        Thanks, <strong>${fn}</strong>! We've received your booking for a <strong>${state.service}</strong>.<br>
+        A confirmation email is heading to <strong>${em}</strong> right now.
+      </p>
+      <div style="background:var(--light-sage);border-radius:16px;padding:1rem;font-size:.85rem;color:#2a4d36;line-height:1.9">
+        📅 ${dateVal||'TBC'} &nbsp;·&nbsp; ⏰ ${state.time||'TBC'}<br>
+        🛏 ${state.beds} bed / ${state.baths} bath &nbsp;·&nbsp; 🔁 ${state.freq}<br>
+        💳 Pay securely after your clean
+      </div>
+      <p style="font-size:.78rem;color:#7a9a8a;margin-top:1.2rem">Questions? Call us on <a href="tel:02012345678" style="color:var(--sage)">020 1234 5678</a></p>
+    </div>`;
+}
+
+// FAQ accordion
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(f => f.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>
